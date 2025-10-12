@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useEffect } from "react";
-import Logo from "my-portfolio/app/components/Logo";
-import MenuButton from "my-portfolio/app/components/MenuButton";
+import Logo from "@/components/Logo";
+import MenuButton from "@/components/MenuButton";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
