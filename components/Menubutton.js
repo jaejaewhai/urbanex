@@ -20,9 +20,9 @@ export default function MenuButton() {
   const router = useRouter();
 
   const menuItems = [
-    { name: "About", path: "/about" },
-    { name: "Services", path: "/services" },
-    { name: "Contact", path: "/contact" }
+    { name: "About", path: "/sections/AboutSection" },
+    { name: "Services", path: "/sections/ServicesSection" },
+    { name: "Contact", path: "/sections/FooterSection" }
   ];
 
   const handleMenuClick = () => {
