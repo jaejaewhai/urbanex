@@ -1,9 +1,9 @@
 "use client";
-import ScrollLayout from "@/components/ScrollLayout";
-import HeroSection from "@/components/sections/HeroSection";
-import AboutSection from "@/components/sections/AboutSection";
-import ServiceSection from "@/components/sections/ServiceSection";
-import FooterSection from "@/components/sections/FooterSection";
+import ScrollLayout from "my-portfolio/app/components/ScrollLayout";
+import HeroSection from "my-portfolio/app/components/sections/HeroSection";
+import AboutSection from "my-portfolio/app/components/sections/AboutSection";
+import ServiceSection from "my-portfolio/app/components/sections/ServiceSection";
+import FooterSection from "my-portfolio/app/components/sections/FooterSection";
 
 export default function Home() {
   return (
