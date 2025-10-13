@@ -41,7 +41,7 @@ export default function Logo() {
           </div>
           <div className="logo-image-hover">
             <Image
-              src="/assets/urbanex_beige.webp"
+              src="/assets/Urbanex_beige.webp"
               alt="Logo Hover"
               width={460}
               height={100}
