@@ -53,8 +53,8 @@ export default function FooterSection({ id }) {
       ref={sectionRef} 
       className="relative"
       style={{
-        minHeight: isMobile ? '70vh' : '20vh',
-        marginTop: isMobile ? '-20vh' : '0'
+        minHeight: isMobile ? '70vh' : '50vh',
+        marginTop: isMobile ? '-10vh' : '0'
       }}
     >
       <div
@@ -79,7 +79,7 @@ export default function FooterSection({ id }) {
             paddingRight: isMobile ? '16px' : '0'
           }}
         >
-          Grow with us.<br /><br />Hover over the pidgeon <br /> to send us a message.
+          Grow with us.<br /><br />Hover on the pidgeon <br /> to send us a message.
         </p>
 
         <div 
