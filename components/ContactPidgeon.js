@@ -94,6 +94,13 @@ export default function ContactPidgeon() {
     setTimeout(() => setIsDragging(false), 50);
   };
 
+  const handleClick = (e) => {
+    // Only open email if not dragging
+    if (isDragging) {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     if (dragStart) {
       document.addEventListener('mousemove', handleMouseMove);
@@ -107,7 +114,9 @@ export default function ContactPidgeon() {
   }, [dragStart, isDragging]);
 
   return (
-    <div 
+    <a
+      href="mailto:hello@urbanex.co.nz"
+      onClick={handleClick}
       ref={containerRef}
       className="contact-pidgeon"
       onMouseDown={handleMouseDown}
@@ -123,7 +132,8 @@ export default function ContactPidgeon() {
         zIndex: 50,
         display: 'flex',
         justifyContent: 'flex-end',
-        opacity: isLoaded ? 1 : 0
+        opacity: isLoaded ? 1 : 0,
+        textDecoration: 'none'
       }}
     >
       <div className="pigeon-wrapper">
@@ -191,6 +201,6 @@ export default function ContactPidgeon() {
           }
         }
       `}</style>
-    </div>
+    </a>
   );
 }

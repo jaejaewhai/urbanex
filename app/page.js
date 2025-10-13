@@ -9,15 +9,16 @@ export default function Home() {
   return (
     <>
       {/* Hero includes its own spacer */}
-      <HeroSection />
+      <HeroSection id="hero" />
       
       {/* Scrolling Sections */}
       <div className="relative z-[2]">
         <ScrollLayout>
-          <AboutSection />
-          <ServiceSection />
+          <AboutSection id="about" />
+          <ServiceSection id="services" />
+          <FooterSection id="contact" />
         </ScrollLayout>
       </div>
     </>
   );
-}// Force rebuild
+}

@@ -5,12 +5,11 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
 
-export default function AboutSection() {
+export default function AboutSection({ id }) {
   const [isMounted, setIsMounted] = useState(false);
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
   const textRefs = useRef([]);
-  const hasAnimated = useRef(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -20,140 +19,105 @@ export default function AboutSection() {
     const content = contentRef.current;
 
     if (section && content) {
-      // Initial content fade in
-      gsap.set(content, { y: 100, opacity: 0 });
+      requestAnimationFrame(() => {
+        // Split text animation when section is in full view
+        const textElements = textRefs.current.filter(Boolean);
+        const allWords = [];
 
-      gsap.to(content, {
-        scrollTrigger: {
-          trigger: section,
-          start: "top 80%",
-          end: "top 10%",
-          scrub: 1,
-        },
-        y: 0,
-        opacity: 1,
-        ease: "none",
-      });
-
-      // Split text animation when section is in full view
-      const textElements = textRefs.current.filter(Boolean);
-      const splitTexts = [];
-      const allWords = [];
-      const imageElement = textRefs.current[1]; // Store logo reference
-
-      textElements.forEach((el, index) => {
-        if (el) {
-          // Skip the image element for split text
-          if (index === 1) {
-            // Set initial state for image
-            gsap.set(el, {
-              opacity: 0,
-              scale: 0.8
-            });
-            allWords.push(el); // Add to animation queue
-            return;
-          }
-
-          const split = new SplitType(el, {
-            types: 'words, chars',
-            tagName: 'span'
-          });
-          splitTexts.push(split);
-
-          // Wrap each word in overflow hidden container
-          split.words.forEach(word => {
-            const wrapper = document.createElement('div');
-            wrapper.style.overflow = 'hidden';
-            wrapper.style.display = 'inline-block';
-            word.parentNode.insertBefore(wrapper, word);
-            wrapper.appendChild(word);
-            allWords.push(word);
-          });
-
-          // Add char class
-          split.chars.forEach(char => {
-            char.classList.add('char');
-            char.style.display = 'inline-block';
-          });
-
-          // Set initial state
-          gsap.set(split.words, {
-            y: 100,
-            opacity: 0
-          });
-        }
-      });
-
-      // Pin the section during text animation
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        end: "+=200%",
-        pin: true,
-        pinSpacing: true,
-      });
-
-      // Create scroll-triggered animation - words appear one by one as you scroll
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        end: "bottom top",
-        onEnter: () => {
-          if (!hasAnimated.current) {
-            hasAnimated.current = true;
-            
-            // Brief pause then animate
-            gsap.delayedCall(0.3, () => {
-              // Animate all words together with scroll scrub
-              gsap.to(allWords, {
-                scrollTrigger: {
-                  trigger: section,
-                  start: "top top",
-                  end: "+=150%",
-                  scrub: 1,
-                },
-                y: 0,
-                opacity: 1,
-                scale: 1,
-                stagger: 0.15,
-                ease: "none"
+        textElements.forEach((el, index) => {
+          if (el) {
+            // Skip the image element for split text
+            if (index === 1) {
+              // Set initial state for image
+              gsap.set(el, {
+                opacity: 0,
+                scale: 0.8
               });
+              allWords.push(el);
+              return;
+            }
+
+            const split = new SplitType(el, {
+              types: 'words, chars',
+              tagName: 'span'
+            });
+
+            // Wrap each word in overflow hidden container
+            split.words.forEach(word => {
+              const wrapper = document.createElement('div');
+              wrapper.style.overflow = 'hidden';
+              wrapper.style.display = 'inline-block';
+              word.parentNode.insertBefore(wrapper, word);
+              wrapper.appendChild(word);
+              allWords.push(word);
+            });
+
+            // Add char class
+            split.chars.forEach(char => {
+              char.classList.add('char');
+              char.style.display = 'inline-block';
+            });
+
+            // Set initial state
+            gsap.set(split.words, {
+              y: 100,
+              opacity: 0
             });
           }
-        }
-      });
+        });
 
-      // Fade out on exit
-      gsap.to(content, {
-        scrollTrigger: {
+        // Pin the section during text animation
+        ScrollTrigger.create({
           trigger: section,
-          start: "bottom 40%",
-          end: "bottom top",
-          scrub: 1,
-        },
-        y: -100,
-        opacity: 0,
-        ease: "none",
+          start: "top top",
+          end: "+=200%",
+          pin: true,
+          pinSpacing: true,
+        });
+
+        // Create a master timeline for the reveal animation
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: "+=150%",
+            scrub: 1,
+          }
+        });
+
+        // Add animation to timeline with stagger
+        tl.to(allWords, {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          stagger: 0.15,
+          duration: 1,
+          ease: "none"
+        }, 0);
+
+        // REMOVED the fade out animation so text stays visible
       });
 
       // Cleanup
       return () => {
-        splitTexts.forEach(split => {
-          if (split && split.revert) split.revert();
+        ScrollTrigger.getAll().forEach(t => {
+          if (t.vars.trigger === section) {
+            t.kill();
+          }
         });
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
       };
     }
   }, []);
 
   return (
     <section 
+      id={id} 
       ref={sectionRef} 
       className="flex justify-center items-center min-h-screen" 
       style={{ 
         position: 'relative',
         zIndex: 40,
-        backgroundColor: '#2d5f4f',
+        backgroundColor: 'transparent',
         paddingTop: '0',
         marginTop: '0',
         paddingLeft: 'clamp(16px, 5vw, 32px)',

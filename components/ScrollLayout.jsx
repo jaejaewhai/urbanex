@@ -6,7 +6,6 @@ import Lenis from "@studio-freight/lenis";
 
 export default function ScrollLayout({ children }) {
   const [isMounted, setIsMounted] = useState(false);
-  const [currentSection, setCurrentSection] = useState(0);
 
   useEffect(() => {
     setIsMounted(true);
@@ -34,44 +33,12 @@ export default function ScrollLayout({ children }) {
     // Update ScrollTrigger on Lenis scroll
     lenis.on("scroll", ScrollTrigger.update);
 
-    // Wait a bit for sections to render
-    const timer = setTimeout(() => {
-      const sections = document.querySelectorAll("section");
-      sections.forEach((section, index) => {
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top center",
-          end: "bottom center",
-          onEnter: () => setCurrentSection(index),
-          onEnterBack: () => setCurrentSection(index),
-        });
-      });
-    }, 100);
-
     return () => {
-      clearTimeout(timer);
       lenis.destroy();
       gsap.ticker.remove(() => {}); // Remove ticker callback
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
 
-  return (
-    <>
-      {children}
-
-      {isMounted && (
-        <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-2 scroll-indicator">
-          {[0, 1, 2, 3].map((index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                currentSection === index ? 'bg-black scale-150' : 'bg-gray-400'
-              }`}
-            />
-          ))}
-        </div>
-      )}
-    </>
-  );
+  return <>{children}</>;
 }

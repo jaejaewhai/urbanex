@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function MenuButton() {
   const [open, setOpen] = useState(false);
@@ -20,9 +21,9 @@ export default function MenuButton() {
   const router = useRouter();
 
   const menuItems = [
-    { name: "About", path: "/sections/AboutSection" },
-    { name: "Services", path: "/sections/ServicesSection" },
-    { name: "Contact", path: "/sections/FooterSection" }
+    { name: "About", path: "#about" },
+    { name: "Services", path: "#services" },
+    { name: "Contact", path: "#contact" }
   ];
 
   const handleMenuClick = () => {
@@ -47,7 +48,51 @@ export default function MenuButton() {
 
   const handleMenuItemClick = (path) => {
     if (!isDragging) {
-      router.push(path);
+      // Close menu with animation first
+      gsap.to(menuItemsRef.current, {
+        opacity: 0,
+        y: -20,
+        duration: 0.3,
+        stagger: 0.05,
+        ease: "power2.out",
+        onComplete: () => {
+          setOpen(false);
+          menuItemsRef.current = [];
+          
+          // Then scroll to section
+          if (path.startsWith('#')) {
+            const element = document.querySelector(path);
+            if (element) {
+              // Small delay to ensure menu is closed
+              setTimeout(() => {
+                // Get the true position relative to the document
+                const rect = element.getBoundingClientRect();
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                let targetPosition = rect.top + scrollTop;
+                
+                // For About section, scroll to start of section minus a small offset
+                // This ensures hero has scrolled past and animation starts fresh
+                if (path === '#about') {
+                  targetPosition = targetPosition - 100; // Just a small offset from top
+                }
+                
+                // Smooth scroll to position
+                window.scrollTo({
+                  top: Math.max(0, targetPosition), // Don't go negative
+                  behavior: 'smooth'
+                });
+                
+                // Refresh ScrollTrigger after a delay to let scroll finish
+                setTimeout(() => {
+                  ScrollTrigger.refresh();
+                }, 1000);
+              }, 100);
+            }
+          } else {
+            router.push(path);
+          }
+        }
+      });
     }
   };
 
@@ -123,6 +168,9 @@ export default function MenuButton() {
   }, [dragStart, isDragging]);
 
   useEffect(() => {
+    // Register ScrollTrigger plugin
+    gsap.registerPlugin(ScrollTrigger);
+    
     const updateScale = () => {
       const newScale = window.innerWidth >= 768 ? 1 : 0.7;
       setScale(newScale);

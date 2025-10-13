@@ -4,13 +4,22 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-export default function FooterSection() {
+export default function FooterSection({ id }) {
+  const [isMobile, setIsMobile] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
 
   useEffect(() => {
     setIsMounted(true);
+    
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
     gsap.registerPlugin(ScrollTrigger);
 
     const section = sectionRef.current;
@@ -32,16 +41,56 @@ export default function FooterSection() {
         }
       );
     }
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-[10vh]">
+    <section 
+      id={id} 
+      ref={sectionRef} 
+      className="relative"
+      style={{
+        minHeight: isMobile ? '70vh' : '20vh',
+        marginTop: isMobile ? '-20vh' : '0'
+      }}
+    >
       <div
         ref={contentRef}
-        className="h-full flex flex-col items-center justify-center px-8 text-center"
-        style={{ opacity: isMounted ? undefined : 0 }}
+        className="h-full flex flex-col items-center justify-center text-center"
+        style={{ 
+          opacity: isMounted ? undefined : 0,
+          padding: isMobile ? '32px 24px' : '64px 32px'
+        }}
       >
-        <div className="max-w-4xl mx-auto">
+        {/* CTA Text - above logo */}
+        <p
+          style={{
+            fontSize: isMobile ? '24px' : '50px',
+            textAlign: isMobile ? 'center' : 'right',
+            lineHeight: '1.2',
+            color: '#FFF',
+            marginBottom: isMobile ? '32px' : '48px',
+            width: '100%',
+            maxWidth: '800px',
+            paddingLeft: isMobile ? '16px' : '0',
+            paddingRight: isMobile ? '16px' : '0'
+          }}
+        >
+          Grow with us.<br /><br />Hover over the pidgeon <br /> to send us a message.
+        </p>
+
+        <div 
+          className="mx-auto mb-12"
+          style={{
+            maxWidth: isMobile ? '280px' : '400px',
+            width: '100%',
+            paddingLeft: isMobile ? '16px' : '0',
+            paddingRight: isMobile ? '16px' : '0'
+          }}
+        >
           <Image
             src="/assets/Urbanex_transparent.webp"
             alt="Urbanex Logo"
@@ -54,22 +103,20 @@ export default function FooterSection() {
             }}
           />
         </div>
-        
-        <div className="w-48 h-0.5 bg-black mx-auto my-12"></div>
-
-        <div className="inline-flex items-center gap-4 px-8 py-4 border-2 border-black mb-12">
-          <span className="text-3xl">✉</span>
-          <span className="text-xl font-semibold tracking-wider">CORRESPONDENCE WELCOME</span>
-        </div>
 
         <p className="text-lg opacity-60 mb-8">
           {/* Add your contact info here */}
         </p>
 
-        <div className="flex justify-center gap-8 text-sm tracking-wider">
-          <a href="#" className="hover:opacity-60 transition-opacity">PRIVACY</a>
-          <a href="#" className="hover:opacity-60 transition-opacity">TERMS</a>
-          <a href="#" className="hover:opacity-60 transition-opacity">© 2024 URBANEX</a>
+        <div 
+          className="flex justify-center text-sm text-white tracking-wider"
+          style={{
+            gap: isMobile ? '8px' : '16px',
+            paddingLeft: isMobile ? '16px' : '0',
+            paddingRight: isMobile ? '16px' : '0'
+          }}
+        >
+          <a href="#" className="hover:opacity-60 transition-opacity">© 2025 URBANEX</a>
         </div>
       </div>
     </section>
