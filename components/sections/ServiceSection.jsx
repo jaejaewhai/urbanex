@@ -158,7 +158,6 @@ export default function ServicesSection({ id }) {
       "Web Design",
       "Web Development",
       "E-Commerce",
-      "Social Media Tamplet",
       "Search Engine Optimization",
       "Brand Identity and Systems"
     ],
@@ -168,6 +167,7 @@ export default function ServicesSection({ id }) {
       "Motion Graphics",
       "Art Direction",
       "Copy Writing",
+      "Social Media Tamplate"
     ]
   };
 
