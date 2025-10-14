@@ -17,12 +17,12 @@ export default function HeroSection({ className }) {
   const colorUpdateTimeoutRef = useRef(null);
 
   const palettes = [
-    ['#D95B43', '#7E2F2F'],
-    ['#8A4B3A', '#523F38'],
-    ['#B84592', '#3B2C35'],
-    ['#FFA69E', '#401F3E'],
-    ['#FF6F61', '#1C1C1C'],
-    ['#FB8B24', '#3D1E6D']
+    ['#5a9fd4', '#4a8fc4'],
+    ['#3d7bb8', '#2d6ba8'],
+    ['#4C7DA8', '#3F70A2'],
+    ['#447ea0', '#32668A'],
+    ['#1e4d73', '#0e3f5b'],
+    ['#0a2e44', '#001356']
   ];
 
   const getRandomPalette = () => {
@@ -34,12 +34,12 @@ export default function HeroSection({ className }) {
     if (layer1Ref.current && layer2Ref.current) {
       // Use GSAP for smooth color transitions
       gsap.to(layer1Ref.current, {
-        background: `radial-gradient(circle at center, ${color1}, transparent 70%)`,
+        background: `radial-gradient(circle at center, ${color1} 0%, ${color1}dd 40%, transparent 85%)`,
         duration: 1.5,
         ease: "power2.inOut"
       });
       gsap.to(layer2Ref.current, {
-        background: `radial-gradient(circle at center, ${color2}, transparent 70%)`,
+        background: `radial-gradient(circle at center, ${color2} 0%, ${color2}dd 40%, transparent 85%)`,
         duration: 1.5,
         ease: "power2.inOut"
       });
@@ -194,7 +194,7 @@ export default function HeroSection({ className }) {
             className={`rothko-blob ${isMobile ? 'mobile' : ''}`}
             style={{
               animationDelay: '15s',
-              opacity: 0.5,
+              opacity: 0.7,
             }}
           />
           
@@ -211,7 +211,7 @@ export default function HeroSection({ className }) {
             className={`rothko-blob ${isMobile ? 'mobile' : ''}`}
             style={{
               animationDelay: '15s',
-              opacity: 0.5,
+              opacity: 0.7,
             }}
           />
         </div>
@@ -224,7 +224,7 @@ export default function HeroSection({ className }) {
       </section>
 
       {/* Spacer - Control scroll timing HERE */}
-      <div ref={spacerRef} style={{ height: '100vh' }} />
+      <div ref={spacerRef} style={{ height: '100vh', position: 'relative', zIndex: 20 }} />
 
       <style jsx>{`
         .rothko-blob {
@@ -235,11 +235,10 @@ export default function HeroSection({ className }) {
           height: 80vh;
           pointer-events: none;
           z-index: 1;
-          opacity: 0.6;
+          opacity: 0.85;
           mix-blend-mode: screen;
-          background: radial-gradient(circle at center, red, transparent 70%);
-          filter: blur(40px);
-          animation: drift 30s ease-in-out infinite;
+          filter: blur(60px);
+          animation: drift 20s ease-in-out infinite;
           will-change: transform;
           backface-visibility: hidden;
           transform: translateZ(0);
@@ -248,8 +247,8 @@ export default function HeroSection({ className }) {
         /* Mobile optimizations */
         .rothko-blob.mobile {
           animation: drift-mobile 40s ease-in-out infinite;
-          filter: blur(30px);
-          opacity: 0.5;
+          filter: blur(50px);
+          opacity: 0.75;
         }
 
         @keyframes drift {

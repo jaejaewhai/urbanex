@@ -176,7 +176,11 @@ export default function ServicesSection({ id }) {
       id={id} 
       ref={sectionRef}
       className="relative min-h-screen"
-      style={{ paddingBottom: '80px' }}
+      style={{ 
+        paddingBottom: '80px',
+        zIndex: 20,
+        position: 'relative'
+      }}
     >
       <div 
         ref={contentRef}
