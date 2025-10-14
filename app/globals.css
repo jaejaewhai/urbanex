@@ -9,7 +9,6 @@
 
 /* Prevent FOUC and layout shifts */
 html {
-  height: 100%;
   margin: 0;
   padding: 0;
   background-color: #dad2c3;
@@ -19,7 +18,6 @@ html {
 }
 
 body {
-  height: 100%;
   margin: 0;
   padding: 0;
   background-color: #dad2c3;
