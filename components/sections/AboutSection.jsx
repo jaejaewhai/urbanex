@@ -20,85 +20,78 @@ export default function AboutSection({ id }) {
 
     if (section && content) {
       requestAnimationFrame(() => {
-        // Split text animation when section is in full view
         const textElements = textRefs.current.filter(Boolean);
         const allWords = [];
 
         textElements.forEach((el, index) => {
           if (el) {
-            // Skip the image element for split text
+            // Image element
             if (index === 1) {
-              // Set initial state for image
               gsap.set(el, {
                 opacity: 0,
-                scale: 0.8
+                y: 20,
+                force3D: true // Force GPU acceleration
               });
               allWords.push(el);
               return;
             }
 
+            // Use SplitType but optimize it
             const split = new SplitType(el, {
-              types: 'words, chars',
+              types: 'words', // ONLY words, not chars - much lighter
               tagName: 'span'
             });
 
-            // Wrap each word in overflow hidden container
-            split.words.forEach(word => {
-              const wrapper = document.createElement('div');
-              wrapper.style.overflow = 'hidden';
-              wrapper.style.display = 'inline-block';
-              word.parentNode.insertBefore(wrapper, word);
-              wrapper.appendChild(word);
-              allWords.push(word);
-            });
-
-            // Add char class
-            split.chars.forEach(char => {
-              char.classList.add('char');
-              char.style.display = 'inline-block';
-            });
-
-            // Set initial state
+            // Set initial state with GPU optimization
             gsap.set(split.words, {
-              y: 100,
-              opacity: 0
+              opacity: 0,
+              y: 30, // Reduced distance = less calculation
+              force3D: true, // Force GPU layer
+              willChange: 'transform, opacity'
             });
+
+            allWords.push(...split.words);
           }
         });
 
-        // Pin the section during text animation
+        // Pin the section
         ScrollTrigger.create({
           trigger: section,
           start: "top top",
           end: "+=200%",
           pin: true,
           pinSpacing: true,
+          anticipatePin: 1 // Helps with flickering
         });
 
-        // Create a master timeline for the reveal animation
+        // Optimized timeline with batch rendering
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: section,
             start: "top top",
             end: "+=150%",
-            scrub: 1,
+            scrub: 0.5, // Lower scrub = smoother on mobile
+            invalidateOnRefresh: true
           }
         });
 
-        // Add animation to timeline with stagger
-        tl.to(allWords, {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          stagger: 0.15,
-          duration: 1,
-          ease: "none"
-        }, 0);
+        // Animate in batches for better performance
+        const batchSize = 3;
+        for (let i = 0; i < allWords.length; i += batchSize) {
+          const batch = allWords.slice(i, i + batchSize);
+          tl.to(batch, {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+            ease: "power2.out",
+            stagger: 0.05
+          }, i * 0.03);
+        }
 
-        // REMOVED the fade out animation so text stays visible
+        // Clear will-change after animation
+        tl.set(allWords, { willChange: 'auto' });
       });
 
-      // Cleanup
       return () => {
         ScrollTrigger.getAll().forEach(t => {
           if (t.vars.trigger === section) {
@@ -136,7 +129,6 @@ export default function AboutSection({ id }) {
           gap: ''
         }}
       >
-        {/* Top lines */}
         <p 
           ref={el => textRefs.current[0] = el}
           style={{ 
@@ -151,8 +143,7 @@ export default function AboutSection({ id }) {
           Kia ora !
         </p>
 
-       {/* Urbanex line */}
-      <div style={{ 
+        <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
           gap: '16px',
@@ -192,7 +183,6 @@ export default function AboutSection({ id }) {
           </span>
         </div>
 
-        {/* Bottom lines */}
         <p 
           ref={el => textRefs.current[3] = el}
           style={{ 
@@ -245,19 +235,11 @@ export default function AboutSection({ id }) {
             margin: '0',
             color: '#dad2c3',
             lineHeight: '1.2'
-
           }}
         >
           We care about design that grows your business *
         </p>
-        
       </div>
-
-      <style jsx global>{`
-        .char {
-          display: inline-block;
-        }
-      `}</style>
     </section>
   );
 }

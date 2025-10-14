@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
 
-export default function ServicesSection( {id} ) {
+export default function ServicesSection({ id }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const sectionRef = useRef(null);
@@ -30,118 +30,113 @@ export default function ServicesSection( {id} ) {
     const textElement = textRef.current;
 
     if (section && content && textElement) {
-      // Wait for next frame to ensure DOM is ready
       requestAnimationFrame(() => {
-        // Split text animation for the description
+        // Optimize SplitType - only words
         const split = new SplitType(textElement, {
-          types: 'words, chars',
+          types: 'words',
           tagName: 'span'
         });
 
-        // Wrap each word in overflow hidden container
-        split.words.forEach(word => {
-          const wrapper = document.createElement('div');
-          wrapper.style.overflow = 'hidden';
-          wrapper.style.display = 'inline-block';
-          word.parentNode.insertBefore(wrapper, word);
-          wrapper.appendChild(word);
-        });
-
-        // Add char class
-        split.chars.forEach(char => {
-          char.classList.add('char');
-          char.style.display = 'inline-block';
-        });
-
-        // Set initial state for words
+        // GPU-accelerated initial state
         gsap.set(split.words, {
-          y: 100,
-          opacity: 0
+          opacity: 0,
+          y: 30,
+          force3D: true,
+          willChange: 'transform, opacity'
         });
 
-        // Get all borders after DOM is ready
         const allBorders = section.querySelectorAll('.border-line');
-
-        // Set initial state for all borders
         gsap.set(allBorders, {
           scaleX: 0,
-          transformOrigin: "left center"
+          transformOrigin: "left center",
+          force3D: true
         });
 
-        // Get valid category refs
         const validRefs = categoryRefs.current.filter(ref => ref !== null);
-        
-        // Set initial state for all buttons
         const allButtons = section.querySelectorAll('button');
+        
         gsap.set(allButtons, {
           opacity: 0,
-          y: 20
+          y: 15,
+          force3D: true
         });
 
-        // Pin the section during animation
-        const pinTrigger = ScrollTrigger.create({
+        // Optimized pin
+        ScrollTrigger.create({
           trigger: section,
           start: "top top",
-          end: "+=400%",
+          end: "+=300%", // Reduced from 400%
           pin: true,
           pinSpacing: true,
+          anticipatePin: 1
         });
 
-        // Create a master timeline
+        // Optimized timeline
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "+=400%",
-            scrub: 1,
+            end: "+=300%",
+            scrub: 0.5, // Reduced scrub for smoother mobile
+            invalidateOnRefresh: true
           }
         });
 
-        // Add text animation - starts immediately
-        tl.to(split.words, {
-          y: 0,
-          opacity: 1,
-          stagger: 0.05,
-          duration: 1,
-          ease: "none"
-        }, 0);
+        // Text animation - batch for performance
+        const wordBatchSize = 5;
+        for (let i = 0; i < split.words.length; i += wordBatchSize) {
+          const batch = split.words.slice(i, i + wordBatchSize);
+          tl.to(batch, {
+            y: 0,
+            opacity: 1,
+            duration: 0.3,
+            ease: "power2.out",
+            stagger: 0.02
+          }, i * 0.015);
+        }
 
-        // Collect all lines (category buttons + item buttons) in order
+        // Collect all lines
         const allLines = [];
         validRefs.forEach((row) => {
           const buttons = row.querySelectorAll('button');
-          buttons.forEach(btn => {
-            allLines.push(btn);
-          });
+          buttons.forEach(btn => allLines.push(btn));
         });
 
-        // Animate each line one by one after text
-        allLines.forEach((button, index) => {
-          tl.to(button, {
+        // Animate lines in batches
+        const lineBatchSize = 3;
+        let lineStartTime = 1;
+        for (let i = 0; i < allLines.length; i += lineBatchSize) {
+          const batch = allLines.slice(i, i + lineBatchSize);
+          tl.to(batch, {
             opacity: 1,
             y: 0,
             duration: 0.2,
-            ease: "none"
-          }, 1.5 + index * 0.1);
-        });
+            ease: "power2.out",
+            stagger: 0.03
+          }, lineStartTime);
+          lineStartTime += 0.15;
+        }
 
-        // Animate all borders together after all lines are revealed
-        const bordersStartTime = 1.5 + allLines.length * 0.1;
+        // Borders animation
         tl.to(allBorders, {
           scaleX: 1,
-          duration: 1.5,
+          duration: 1,
           ease: "power2.inOut"
-        }, bordersStartTime);
+        }, lineStartTime);
 
-        // Fade out on exit
+        // Clear will-change
+        tl.set([...split.words, ...allButtons, ...allBorders], { 
+          willChange: 'auto' 
+        });
+
+        // Optimized fade out
         gsap.to(content, {
           scrollTrigger: {
             trigger: section,
             start: "bottom 40%",
             end: "bottom top",
-            scrub: 1,
+            scrub: 0.5,
           },
-          y: -100,
           opacity: 0,
           ease: "none",
         });
@@ -183,7 +178,6 @@ export default function ServicesSection( {id} ) {
       className="relative min-h-screen"
       style={{ paddingBottom: '80px' }}
     >
-      {/* Content */}
       <div 
         ref={contentRef}
         className="relative"
@@ -193,7 +187,6 @@ export default function ServicesSection( {id} ) {
           padding: '30px',
         }}
       >
-        {/* Description Text - centered vertically */}
         <div
           style={{
             marginTop: isMobile ? '5vh' : '10vh',
@@ -217,7 +210,6 @@ export default function ServicesSection( {id} ) {
             Our capabilities include ... ↓
           </p>
 
-          {/* Category Containers - directly after text */}
           <div
             style={{
               display: 'flex',
@@ -321,12 +313,6 @@ export default function ServicesSection( {id} ) {
           </div>
         </div>
       </div>
-
-      <style jsx global>{`
-        .char {
-          display: inline-block;
-        }
-      `}</style>
     </section>
   );
 }
