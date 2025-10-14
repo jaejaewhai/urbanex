@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -8,7 +9,6 @@ export default function HeroSection({ className }) {
   const sectionRef = useRef(null);
   const containerRef = useRef(null);
   const spacerRef = useRef(null);
-  const imgRef = useRef(null);
   const animationRef = useRef(null);
 
   useEffect(() => {
