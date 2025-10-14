@@ -157,7 +157,7 @@ export default function AboutSection({ id }) {
               height: 'auto',
             }}>
             <Image
-              src="/assets/Urbanex_beige.webp"
+              src="/assets/Urbanex_beige.svg"
               alt="Urbanex Logo"
               width={300}
               height={300}

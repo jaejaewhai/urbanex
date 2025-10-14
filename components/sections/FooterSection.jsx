@@ -92,7 +92,7 @@ export default function FooterSection({ id }) {
           }}
         >
           <Image
-            src="/assets/Urbanex_transparent.webp"
+            src="/assets/Urbanex_green.svg"
             alt="Urbanex Logo"
             width={300}
             height={300}
