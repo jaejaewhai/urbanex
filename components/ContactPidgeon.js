@@ -139,7 +139,7 @@ export default function ContactPidgeon() {
       <div className="pigeon-wrapper">
         <div className="pigeon-normal">
           <Image
-            src="/assets/Urbanex_mail.webp"
+            src="/assets/Urbanex_mail.svg"
             alt="Contact-Pidgeon"
             width={553}
             height={367}
@@ -156,7 +156,7 @@ export default function ContactPidgeon() {
         
         <div className="pigeon-hover">
           <Image
-            src="/assets/Urbanex_mail_expand.webp"
+            src="/assets/Urbanex_mail_expand.svg"
             alt="Contact-Pidgeon-Expanded"
             width={553}
             height={367}
