@@ -205,7 +205,7 @@ export default function ServicesSection({ id }) {
               marginBottom: '24px',
             }}
           >
-            We craft design and development with flare.
+            We craft design and development with flair.
             <br /><br />
             Our capabilities include ... ↓
           </p>
