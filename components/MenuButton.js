@@ -22,8 +22,7 @@ export default function MenuButton() {
 
   const menuItems = [
     { name: "About", path: "#about" },
-    { name: "Services", path: "#services" },
-    { name: "Contact", path: "#contact" }
+    { name: "Services", path: "#services" }
   ];
 
   const handleMenuClick = () => {
