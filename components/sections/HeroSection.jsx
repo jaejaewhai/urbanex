@@ -31,9 +31,8 @@ export default function HeroSection({ className }) {
 
     const container = containerRef.current;
     const spacer = spacerRef.current;
-    const img = imgRef.current;
 
-    // Wait for image to load before showing and animating
+    // Initialize animation
     const initAnimation = () => {
       if (!container || !spacer) return;
 
@@ -59,18 +58,11 @@ export default function HeroSection({ className }) {
       });
     };
 
-    // Check if image is already loaded (cached)
-    if (img && img.complete) {
-      initAnimation();
-    } else if (img) {
-      img.addEventListener('load', initAnimation);
-    }
+    // Initialize after mount
+    initAnimation();
 
     // Cleanup
     return () => {
-      if (img) {
-        img.removeEventListener('load', initAnimation);
-      }
       
       // Kill specific ScrollTrigger instances
       if (animationRef.current) {
@@ -104,23 +96,21 @@ export default function HeroSection({ className }) {
             width: '100%',
             height: '100vh',
             zIndex: 10,
-            opacity: isLoaded ? 1 : 0, // Prevent flash
+            opacity: isLoaded ? 1 : 0,
             transition: isLoaded ? 'none' : 'opacity 0.3s ease-in',
           }}
         >
-          <img
-            ref={imgRef}
+          <Image
             src="/assets/hero-background.webp"
             alt="Hero Background"
-            loading="eager" // Load immediately, not lazy
-            decoding="async" // Async decode for better performance
+            fill
+            priority
+            quality={95}
+            sizes="100vw"
+            onLoadingComplete={() => setIsLoaded(true)}
             style={{
-              width: '100%',
-              height: '100%',
               objectFit: 'cover',
               objectPosition: 'center',
-              transform: 'translateZ(0)', // Force GPU acceleration
-              backfaceVisibility: 'hidden', // Reduce repaints
             }}
           />
         </div>

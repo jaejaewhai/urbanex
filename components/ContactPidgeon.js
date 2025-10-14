@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 
@@ -62,7 +62,7 @@ export default function ContactPidgeon() {
     }
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
     if (!dragStart) return;
     
     const diffX = Math.abs(e.clientX - dragStart.mouseX);
@@ -87,12 +87,12 @@ export default function ContactPidgeon() {
         setIsAtRightEdge(false);
       }
     }
-  };
+  }, [dragStart, isDragging]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setDragStart(null);
     setTimeout(() => setIsDragging(false), 50);
-  };
+  }, []);
 
   const handleClick = (e) => {
     // Only open email if not dragging
@@ -111,7 +111,7 @@ export default function ContactPidgeon() {
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [dragStart, isDragging]);
+  }, [dragStart, handleMouseMove, handleMouseUp]);
 
   return (
     <a
@@ -148,6 +148,7 @@ export default function ContactPidgeon() {
               transition: 'clip-path 300ms ease'
             }}
             priority
+            quality={95}
             draggable={false}
             onLoad={() => setIsLoaded(true)}
           />
@@ -163,6 +164,7 @@ export default function ContactPidgeon() {
               clipPath: isHovered ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)',
               transition: 'clip-path 300ms ease'
             }}
+            quality={95}
             draggable={false}
           />
         </div>

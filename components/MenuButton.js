@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -111,7 +111,7 @@ export default function MenuButton() {
     }
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
     if (!dragStart) return;
     
     const diffX = Math.abs(e.clientX - dragStart.mouseX);
@@ -132,12 +132,12 @@ export default function MenuButton() {
       
       setPosition({ left: newLeft, top: newTop });
     }
-  };
+  }, [dragStart, isDragging]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setDragStart(null);
     setTimeout(() => setIsDragging(false), 50);
-  };
+  }, []);
 
   useEffect(() => {
     if (open && menuItemsRef.current.length > 0) {
@@ -165,7 +165,7 @@ export default function MenuButton() {
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [dragStart, isDragging]);
+  }, [dragStart, handleMouseMove, handleMouseUp]);
 
   useEffect(() => {
     // Register ScrollTrigger plugin
