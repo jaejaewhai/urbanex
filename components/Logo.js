@@ -28,7 +28,7 @@ export default function Logo() {
         <div className="image-wrapper">
           <div className="logo-image">
             <Image
-              src="/assets/Urbanex_green.svg"
+              src="/assets/Urbanex_transparent.svg"
               alt="Logo"
               width={460}
               height={100}
