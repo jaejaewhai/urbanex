@@ -167,7 +167,7 @@ export default function ServicesSection({ id }) {
       "Motion Graphics",
       "Art Direction",
       "Copy Writing",
-      "Social Media Tamplate"
+      "Social Media Template"
     ]
   };
 

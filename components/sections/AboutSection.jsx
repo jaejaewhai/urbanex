@@ -137,7 +137,7 @@ export default function AboutSection({ id }) {
             fontWeight: '300',
             margin: '0',
             lineHeight: '1.2',
-            color: '#dad2c3'
+            color: '#FFFFFF'
           }}
         >
           Kia ora !
@@ -157,7 +157,7 @@ export default function AboutSection({ id }) {
               height: 'auto',
             }}>
             <Image
-              src="/assets/Urbanex_beige.svg"
+              src="/assets/Urbanex_white.svg"
               alt="Urbanex Logo"
               width={300}
               height={300}
@@ -175,7 +175,7 @@ export default function AboutSection({ id }) {
               fontSize: 'clamp(1.5rem, 4vw, 3rem)',
               fontWeight: '300',
               margin: '0',
-              color: '#dad2c3',
+              color: '#FFF',
               lineheight: '1.2'
             }}
           >
@@ -190,7 +190,7 @@ export default function AboutSection({ id }) {
             fontSize: 'clamp(1.5rem, 4vw, 3rem)',
             fontWeight: '300',
             margin: '0',
-            color: '#dad2c3',
+            color: '#FFF',
             lineHeight: '1.2'
           }}
         >
@@ -204,7 +204,7 @@ export default function AboutSection({ id }) {
             fontSize: 'clamp(1.5rem, 4vw, 3rem)',
             fontWeight: '300',
             margin: '0',
-            color: '#dad2c3',
+            color: '#FFF',
             lineHeight: '1.2'
           }}
         >
@@ -218,7 +218,7 @@ export default function AboutSection({ id }) {
             fontSize: 'clamp(1.5rem, 4vw, 3rem)',
             fontWeight: '300',
             margin: '0',
-            color: '#dad2c3',
+            color: '#FFF',
             lineHeight: '1.2',
             marginBottom: '3rem'
           }}
@@ -233,7 +233,7 @@ export default function AboutSection({ id }) {
             fontSize: 'clamp(1.5rem, 4vw, 3rem)',
             fontWeight: '300',
             margin: '0',
-            color: '#dad2c3',
+            color: '#FFF',
             lineHeight: '1.2'
           }}
         >
