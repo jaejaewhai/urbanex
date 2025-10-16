@@ -140,7 +140,7 @@ export default function AboutSection({ id }) {
             color: '#FFFFFF'
           }}
         >
-          Kia ora !
+          Hello !
         </p>
 
         <div style={{ 
@@ -223,7 +223,7 @@ export default function AboutSection({ id }) {
             marginBottom: '3rem'
           }}
         >
-          by Dan & Justine *
+          by Dan & Justine
         </p>
         
         <p 
@@ -237,7 +237,7 @@ export default function AboutSection({ id }) {
             lineHeight: '1.2'
           }}
         >
-          We care about design that grows your business *
+          We care about design that grows your business
         </p>
       </div>
     </section>
