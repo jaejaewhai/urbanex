@@ -79,7 +79,7 @@ export default function FooterSection({ id }) {
             paddingRight: isMobile ? '16px' : '0'
           }}
         >
-          Grow with us.<br /><br />Hover on the pidgeon <br /> to send us a message.
+          Grow with us.<br /><br />Hover on the pigeon <br /> to send us a message.
         </p>
 
         <div 
