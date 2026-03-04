@@ -65,7 +65,7 @@ export default function ServicesSection({ id }) {
         ScrollTrigger.create({
           trigger: section,
           start: "top top",
-          end: "+=300%", // Reduced from 400%
+          end: "+=300%",
           pin: true,
           pinSpacing: true,
           anticipatePin: 1
@@ -77,7 +77,7 @@ export default function ServicesSection({ id }) {
             trigger: section,
             start: "top top",
             end: "+=300%",
-            scrub: 0.5, // Reduced scrub for smoother mobile
+            scrub: 0.5,
             invalidateOnRefresh: true
           }
         });
@@ -124,22 +124,13 @@ export default function ServicesSection({ id }) {
           ease: "power2.inOut"
         }, lineStartTime);
 
-        // Clear will-change
+        // Clear will-change after animation completes
         tl.set([...split.words, ...allButtons, ...allBorders], { 
           willChange: 'auto' 
         });
 
-        // Optimized fade out
-        gsap.to(content, {
-          scrollTrigger: {
-            trigger: section,
-            start: "bottom 40%",
-            end: "bottom top",
-            scrub: 0.5,
-          },
-          opacity: 0,
-          ease: "none",
-        });
+        // REMOVED the fade out animation that was preventing rewind
+        // The section will now properly rewind when scrolling back
       });
 
       return () => {
@@ -194,9 +185,11 @@ export default function ServicesSection({ id }) {
         <div
           style={{
             marginTop: isMobile ? '5vh' : '10vh',
-            width: isMobile ? '100%' : 'calc((100vw - 60px - 220px) / 12 * 7 + 120px)',
-            marginLeft: isMobile ? '0' : 'calc((100vw - 60px - 220px) / 12 * 2 + 40px)',
-            paddingLeft: '8px',
+            maxWidth: isMobile ? '100%' : '1200px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            paddingLeft: isMobile ? '24px' : '60px',
+            paddingRight: isMobile ? '24px' : '60px',
           }}
         >
           <p

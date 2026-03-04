@@ -116,7 +116,7 @@ export default function FooterSection({ id }) {
             paddingRight: isMobile ? '16px' : '0'
           }}
         >
-          <a href="#" className="hover:opacity-60 transition-opacity">© 2025 URBANEX</a>
+          <a href="#" className="hover:opacity-60 transition-opacity">© 2026 URBANEX</a>
         </div>
       </div>
     </section>
