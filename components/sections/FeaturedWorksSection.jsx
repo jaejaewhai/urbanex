@@ -32,7 +32,6 @@ export default function FeaturedWorksSection({ id }) {
       requestAnimationFrame(() => {
         const validWorks = worksRef.current.filter(Boolean);
 
-        // Set initial states
         gsap.set(title, {
           opacity: 0,
           y: 30,
@@ -45,7 +44,6 @@ export default function FeaturedWorksSection({ id }) {
           force3D: true
         });
 
-        // Pin section
         ScrollTrigger.create({
           trigger: section,
           start: "top top",
@@ -55,7 +53,6 @@ export default function FeaturedWorksSection({ id }) {
           anticipatePin: 1
         });
 
-        // Main timeline
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: section,
@@ -66,7 +63,6 @@ export default function FeaturedWorksSection({ id }) {
           }
         });
 
-        // Animate title
         tl.to(title, {
           opacity: 1,
           y: 0,
@@ -74,7 +70,6 @@ export default function FeaturedWorksSection({ id }) {
           ease: "power2.out"
         }, 0);
 
-        // Animate work items with stagger
         tl.to(validWorks, {
           opacity: 1,
           y: 0,
@@ -83,7 +78,6 @@ export default function FeaturedWorksSection({ id }) {
           ease: "power2.out"
         }, 0.3);
 
-        // Clear will-change
         tl.set([title, ...validWorks], { willChange: 'auto' });
       });
 
@@ -119,7 +113,7 @@ export default function FeaturedWorksSection({ id }) {
         { text: "WEB DESIGN & DEVELOPMENT", isButton: true }
       ],
       video: "/videos/Oh My Croffle_Website 211125.mp4",
-      link: "http://ohmycroffle.co.nz"
+      link: "https://www.ohmycroffle.co.nz"
     }
   ];
 
@@ -143,7 +137,6 @@ export default function FeaturedWorksSection({ id }) {
           padding: '30px',
         }}
       >
-        {/* Using centered layout with equal margins */}
         <div
           style={{
             marginTop: isMobile ? '5vh' : '10vh',
@@ -174,7 +167,7 @@ export default function FeaturedWorksSection({ id }) {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : '1fr',
+              gridTemplateColumns: '1fr',
               gap: isMobile ? '32px' : '48px'
             }}
           >
@@ -182,13 +175,50 @@ export default function FeaturedWorksSection({ id }) {
               <div
                 key={index}
                 ref={el => worksRef.current[index] = el}
-                style={{
-                  display: 'block'
-                }}
+                style={{ display: 'block' }}
               >
-                {/* Project Video + Title - Clickable */}
+                {/* Video - clickable via onClick */}
+                <div
+                  onClick={() => window.open(project.link, '_blank')}
+                  style={{
+                    width: '100%',
+                    height: 0,
+                    paddingBottom: '56.25%',
+                    backgroundColor: '#1a1a1a',
+                    marginBottom: '16px',
+                    overflow: 'hidden',
+                    borderRadius: '4px',
+                    position: 'relative',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <video
+                    ref={index === 0 ? videoRef : null}
+                    className="project-video"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      pointerEvents: 'none'
+                    }}
+                  >
+                    <source src={project.video} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+
+                {/* Project Title - clickable via anchor */}
                 <a
                   href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     textDecoration: 'none',
                     color: 'inherit',
@@ -196,42 +226,6 @@ export default function FeaturedWorksSection({ id }) {
                     display: 'block'
                   }}
                 >
-                  {/* Project Video - Golden Ratio */}
-                  <div
-                    style={{
-                      width: '100%',
-                      height: 0,
-                      paddingBottom: '61.8%', // Golden ratio: 1/1.618 = 0.618 = 61.8%
-                      backgroundColor: '#1a1a1a',
-                      marginBottom: '16px',
-                      overflow: 'hidden',
-                      borderRadius: '4px',
-                      position: 'relative'
-                    }}
-                  >
-                    <video
-                      ref={index === 0 ? videoRef : null}
-                      className="project-video"
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        transform: 'scale(1.05)' // Fixed 1.05x scale
-                      }}
-                    >
-                      <source src={project.video} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
-
-                  {/* Project Title */}
                   <h3
                     style={{
                       fontFamily: 'new-spirit',
@@ -244,7 +238,7 @@ export default function FeaturedWorksSection({ id }) {
                     {project.title}
                   </h3>
                 </a>
-                
+
                 {/* Description with buttons - NOT clickable */}
                 <div
                   style={{
@@ -252,7 +246,6 @@ export default function FeaturedWorksSection({ id }) {
                     fontSize: isMobile ? '18px' : '24px',
                     color: '#ffffff',
                     lineHeight: '1.6',
-                    maxWidth: isMobile ? '100%' : '100%',
                     display: 'flex',
                     flexWrap: 'wrap',
                     alignItems: 'center',
@@ -286,14 +279,7 @@ export default function FeaturedWorksSection({ id }) {
             ))}
           </div>
 
-          {/* View All Link */}
-          <div
-            style={{
-              marginTop: isMobile ? '40px' : '60px'
-            }}
-          >
-           
-          </div>
+          <div style={{ marginTop: isMobile ? '40px' : '60px' }} />
         </div>
       </div>
     </section>
